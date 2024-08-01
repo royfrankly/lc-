@@ -1,10 +1,11 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 struct nodo{
     int inf,fe;
     nodo *izq,*der;
 };
-void inserta_AVL(nodo *&raiz,int dato,int cen);
+void inserta_AVL(nodo *&raiz,int dato,int &cen);
 void buscar_AVL(nodo *raiz, int dato);
 void elimina_AVL(nodo *&raiz,int &cen, int dato);
 void preorden(nodo *raiz);
@@ -13,11 +14,16 @@ void postorden(nodo *raiz);
 void borra(nodo *&aux,nodo *&q,int &cen);
 void reestructura1(nodo *&raiz, int &cen);
 void reestructura2(nodo *&raiz, int &cen);
+void mostrarAVL(nodo* raiz, int espacio = 0, int incremento = 5);
+
+
 int main(void){
     nodo *raiz=NULL;
     int op,dato;
     char opc;
+    int cen1;
     int cen2;
+    int espacios=0;
     system("cls");
     do{
         system("cls");
@@ -29,7 +35,7 @@ int main(void){
         cout<<"\t\t4. RECORRIDO PREORDEN\n\n";
         cout<<"\t\t5. RECORRIDO INORDEN\n\n";
         cout<<"\t\t6. RECORRIDO POSTORDEN\n\n";
-        cout<<"\t\t7. TODOS LOS RECORRIDOS\n\n";
+        cout<<"\t\t7. MOSTRAR Y RECORRIDOS\n\n";
         cout<<"\t\t8. S A L I R\n\n";
         cout<<"\t\t\t\tOPCION  ";
         cin>>op;
@@ -42,8 +48,8 @@ int main(void){
                 system("cls");
                 cout << "\n\n INGRESE EL DATO A INSERTAR: ";
                 cin >> dato;
-                
-                inserta_AVL(raiz, dato, 1);
+                cen1=1;
+                inserta_AVL(raiz, dato, cen1);
                 cout << "\n\t\t¿MAS DATOS? (S/N): ";
                 cin >> opc;
             } while(opc == 's' || opc == 'S');
@@ -87,6 +93,7 @@ int main(void){
             system("pause");
             break;
         case 7:
+            
             cout << "\n\tRECORRIDO PREORDEN";
             cout << "\n\t******************\n\n";
             preorden(raiz);
@@ -96,6 +103,9 @@ int main(void){
             cout << "\n\tRECORRIDO POSTORDEN";
             cout << "\n\t*******************\n\n";
             postorden(raiz);
+
+            cout << "\n\n AVL: \n\n";
+            mostrarAVL(raiz);
             system("pause");
         }
     }while(op<8);
@@ -103,7 +113,8 @@ int main(void){
 }
 
 
-void inserta_AVL(nodo *&raiz, int dato, int cen){
+
+void inserta_AVL(nodo *&raiz, int dato, int &cen){
     nodo *raiz1, *raiz2,*x;
     if(raiz!=NULL){
         if(dato<raiz->inf){
@@ -111,7 +122,7 @@ void inserta_AVL(nodo *&raiz, int dato, int cen){
             if(cen==1){
                 switch(raiz->fe){
                     case 1: raiz->fe=0;cen = 0; break;
-                    case 2: raiz->fe=-1;break;
+                    case 0: raiz->fe=-1;break;
                     case -1:
                             raiz1=raiz->izq;
                             if(raiz1->fe<=0){
@@ -203,9 +214,6 @@ void buscar_AVL(nodo *raiz, int dato){
             cout<<"\n\tEL DATO BUSCADO SI EXISTE....\n\n";
 }
 
-void elimina_AVL(nodo *&raiz,int dato){
-
-}
 void preorden(nodo *raiz){
     if(raiz!=NULL){
         cout<<raiz->inf<<"\n\n";
@@ -375,3 +383,18 @@ void reestructura2(nodo *&raiz, int &cen){
 
 }
 
+
+void mostrarAVL(nodo* raiz, int espacio, int incremento) {
+    if (raiz != NULL) {
+        espacio += incremento;
+
+        mostrarAVL(raiz->der, espacio);
+
+        cout << endl;
+        for (int i = incremento; i < espacio; i++)
+            cout << "  ";
+        cout << raiz->inf <<" "<<raiz->fe<< "\n";
+
+        mostrarAVL(raiz->izq, espacio);
+    }
+}
